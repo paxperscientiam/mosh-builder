@@ -1,5 +1,25 @@
 #!/bin/sh
 
+# https://stackoverflow.com/a/28776166
+sourced=0
+if [ -n "$ZSH_EVAL_CONTEXT" ]; then 
+    case $ZSH_EVAL_CONTEXT in *:file) sourced=1;; esac
+elif [ -n "$KSH_VERSION" ]; then
+    [ "$(cd $(dirname -- $0) && pwd -P)/$(basename -- $0)" != "$(cd $(dirname -- ${.sh.file}) && pwd -P)/$(basename -- ${.sh.file})" ] && sourced=1
+elif [ -n "$BASH_VERSION" ]; then
+    (return 0 2>/dev/null) && sourced=1 
+else # All other shells: examine $0 for known shell binary filenames
+    # Detects `sh` and `dash`; add additional shell filenames as needed.
+    case ${0##*/} in sh|dash) sourced=1;; esac
+fi
+
+if [ 1 -eq $sourced ]
+then
+    printf 'To avoid polluting your environment, please do not source this file\n'
+    return
+fi
+
+
 unset CDPATH
 
 # references
@@ -11,10 +31,6 @@ unset CDPATH
 
 # mosh could be build from latest source or by using specific tarball version
 # https://mosh.org/#getting
-
-printf 'Making build directory: %s ... ' "${HOME}/build"
-mkdir -p "${HOME}/build"
-printf 'done\n'
 
 build="${HOME}/build"
 prefix="${HOME}/my-prefix"
@@ -48,6 +64,25 @@ buildMosh() {
     make
     make install
 }
+
+
+if [ 0 -lt "${#*}" ];
+then
+    printf 'Making build directory: %s ... ' "${HOME}/build"
+    mkdir -p "${HOME}/build"
+    printf 'done\n'
+else
+    cat <<'HEREDOC'
+Usage:
+ ./build.sh <command> [command2]
+
+Commands:
+ buildProtoc
+ buildMosh
+HEREDOC
+
+fi
+
 
 for fun in ${@};
 do
