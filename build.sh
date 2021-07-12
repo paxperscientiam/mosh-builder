@@ -1,4 +1,5 @@
 #!/bin/sh
+
 unset CDPATH
 
 # references
@@ -11,7 +12,9 @@ unset CDPATH
 # mosh could be build from latest source or by using specific tarball version
 # https://mosh.org/#getting
 
+printf 'Making build directory: %s ... ' "${HOME}/build"
 mkdir -p "${HOME}/build"
+printf 'done\n'
 
 build="${HOME}/build"
 prefix="${HOME}/my-prefix"
@@ -58,4 +61,8 @@ wait $! || printf 'failed\n'; exit
 printf 'done!\n'
 
 
+printf 'Add `prefix="%s"` and `export PATH="${prefix}/bin:${PATH}"` to remote .bashrc and to .bash_profile\n\n' "${prefix}"
 
+printf 'Add `export LANG="en_US.UTF-8"` and `export LD_LIBRARY_PATH="${HOME}/my-prefix/lib"` to .bash_profile\n\n'
+
+printf 'Hope it works!\n'
