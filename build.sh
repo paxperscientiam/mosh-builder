@@ -49,20 +49,32 @@ buildMosh() {
     make install
 }
 
+for fun in ${@};
+do
+    if type "${fun}" >/dev/null 2>&1; then
+        "${fun}" &
+        printf 'working ... '
+        wait $!
+        printf ' done\n\n'
+    else
+        printf '"%s" is not a known function' "$fun"
+    fi
+done
 
-buildProtoc &
-printf '\v Building protocol buffers ... '
-wait $! || printf 'failed\n'; exit
-printf 'done!\n'
 
-buildMosh &
-printf '\v Building mosh!!! ... '
-wait $! || printf 'failed\n'; exit
-printf 'done!\n'
+# buildProtoc &
+# printf '\v Building protocol buffers ... '
+# wait $! || printf 'failed\n'; exit
+# printf 'done!\n'
+
+# buildMosh &
+# printf '\v Building mosh!!! ... '
+# wait $! || printf 'failed\n'; exit
+# printf 'done!\n'
 
 
-printf 'Add `prefix="%s"` and `export PATH="${prefix}/bin:${PATH}"` to remote .bashrc and to .bash_profile\n\n' "${prefix}"
+# printf 'Add `prefix="%s"` and `export PATH="${prefix}/bin:${PATH}"` to remote .bashrc and to .bash_profile\n\n' "${prefix}"
 
-printf 'Add `export LANG="en_US.UTF-8"` and `export LD_LIBRARY_PATH="${HOME}/my-prefix/lib"` to .bash_profile\n\n'
+# printf 'Add `export LANG="en_US.UTF-8"` and `export LD_LIBRARY_PATH="${HOME}/my-prefix/lib"` to .bash_profile\n\n'
 
-printf 'Hope it works!\n'
+# printf 'Hope it works!\n'
