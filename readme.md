@@ -1,4 +1,4 @@
-POSIX compliant script for unprivileged users to build mosh and protocol buffers.
+(mostly) POSIX compliant script for unprivileged users to build mosh and protocol buffers.
 
 Usage:
 
